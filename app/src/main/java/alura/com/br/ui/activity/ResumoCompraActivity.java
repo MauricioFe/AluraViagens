@@ -2,11 +2,13 @@ package alura.com.br.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import alura.com.br.R;
@@ -14,6 +16,8 @@ import alura.com.br.model.Pacote;
 import alura.com.br.util.DataUtil;
 import alura.com.br.util.MoedaUtil;
 import alura.com.br.util.ResourceUtil;
+
+import static alura.com.br.ui.activity.PacoteActivityConstantes.CHAVE_PACOTE;
 
 public class ResumoCompraActivity extends AppCompatActivity {
 
@@ -23,10 +27,19 @@ public class ResumoCompraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resumo_compra);
-
         setTitle(TITLEAPPBAR);
-        Pacote pacote = new Pacote("São Paulo", "sao_paulo_sp", 2,
-                new BigDecimal("243.99"));
+        carregaPacoteRecebido();
+    }
+
+    private void carregaPacoteRecebido() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(CHAVE_PACOTE)) {
+            Pacote pacote = (Pacote) intent.getSerializableExtra(CHAVE_PACOTE);
+            inicializaCampos(pacote);
+        }
+    }
+
+    private void inicializaCampos(Pacote pacote) {
         mostrarLocal(pacote);
         mostrarImagem(pacote);
         mostrarData(pacote);

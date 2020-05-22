@@ -15,9 +15,12 @@ import alura.com.br.R;
 import alura.com.br.model.Pacote;
 import alura.com.br.ui.adapter.ListaPacotesAdapter;
 
+import static alura.com.br.ui.activity.PacoteActivityConstantes.CHAVE_PACOTE;
+
 public class ListaPacotesActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Pacotes";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +31,22 @@ public class ListaPacotesActivity extends AppCompatActivity {
     }
 
     private void configuraLista() {
-        ListView listaPacote = findViewById(R.id.lista_pacotes_listView);
-        List<Pacote> pacotes = new PacoteDAO().Lista();
+        final ListView listaPacote = findViewById(R.id.lista_pacotes_listView);
+        final List<Pacote> pacotes = new PacoteDAO().Lista();
         listaPacote.setAdapter(new ListaPacotesAdapter(pacotes, this));
 
         listaPacote.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListaPacotesActivity.this, ResumoPacoteActivity.class);
-                startActivity(intent);
+                Pacote pacoteClicado = pacotes.get(position);
+                retViewResumoPacote(pacoteClicado);
             }
         });
+    }
+
+    private void retViewResumoPacote(Pacote pacoteClicado) {
+        Intent intent = new Intent(ListaPacotesActivity.this, ResumoPacoteActivity.class);
+        intent.putExtra(CHAVE_PACOTE, pacoteClicado);
+        startActivity(intent);
     }
 }
